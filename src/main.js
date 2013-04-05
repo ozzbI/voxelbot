@@ -20,26 +20,6 @@ var clock = new THREE.Clock();
 init();
 animate();
 
-this.onkeydown = function ( event ) {
-    switch ( event.keyCode ) {
-
-        case 38: /*up*/
-        case 87: /*W*/ cube.position.add((new THREE.Vector3(10, 0, 0))
-            .applyMatrix4((new THREE.Matrix4).extractRotation(cube.matrix))); break;
-
-        case 37: /*left*/
-        case 65: /*A*/ cube.rotation.y += 0.02; break;
-
-        case 40: /*down*/
-        case 83: /*S*/ cube.position.add((new THREE.Vector3(-10, 0, 0))
-            .applyMatrix4((new THREE.Matrix4).extractRotation(cube.matrix))); break;
-
-        case 39: /*right*/
-        case 68: /*D*/ cube.rotation.y -= 0.02; break;
-
-    }
-
-};
 
 function init() {
 
@@ -48,10 +28,6 @@ function init() {
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 
     scene = new THREE.Scene();
-
-    // controls = new THREE.FirstPersonControls( camera );
-    // controls.movementSpeed = 1000;
-    // controls.lookSpeed = 0.1;
 
     camera.position.x = -350;
     // camera.position.z = 300;
@@ -88,7 +64,9 @@ function init() {
     scene.add( cube );
     cube.add( camera )
 
-
+    controls = new THREE.BasicControls( cube );
+    controls.movementSpeed = 1000;
+    controls.rotationSpeed = 1;
 
 
     renderer = new THREE.WebGLRenderer();
@@ -115,8 +93,6 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
-
-    // controls.handleResize();
 
 }
 
@@ -228,11 +204,8 @@ function animate() {
 
 function render() {
 
-    // controls.update( clock.getDelta() );
-    // var keyboard = new THREE.KeyboardState();
-
-    // if( keyboard.pressed("W") )
-        // cube.position.x = Math.sin(clock.getElapsedTime())*300.;
+    controls.update( clock.getDelta() );
+    
     camera.lookAt(new THREE.Vector3(0., 0., 0.));
     renderer.render( scene, camera );
 
